@@ -3,6 +3,7 @@ package com.clone.OneC.generate_code;
 import com.squareup.javapoet.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,20 +18,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-@Component
-public class GenerateEntity {
 
-    private final String nameEntity;
-
-    private final String nameProject;
-
-    private final  String pathForCreateDirectory;
-
-    private final String pathForCreateJavaClass;
-
-    private final List<MethodSpec> methodSpecs = new ArrayList<>();
-
-    private final  List<AnnotationSpec> annotationSpecs = new ArrayList<>();
+public class GenerateEntity extends GenerateClass {
 
     @Getter
     @Setter
@@ -40,38 +29,21 @@ public class GenerateEntity {
 
 
     public GenerateEntity(String nameEntity, String nameProject,
-                          String pathBeforeProject, List<MethodSpec> methodSpecs, List<AnnotationSpec> annotationSpecs,
-                          HashMap<TypeName, String> fields) {
-        this.nameEntity = nameEntity;
-        this.nameProject = nameProject;
-        this.pathForCreateDirectory = pathBeforeProject + nameProject + "/src/main/java/com/example/" + nameProject;
-        this.pathForCreateJavaClass = pathBeforeProject + nameProject + "/src/main/java/";
-        this.setMethodSpecs(methodSpecs);
-        this.setAnnotationSpecs(annotationSpecs);
+                          String pathBeforeProject,
+                          Map<TypeName, String> fields) {
+        super(nameEntity, nameProject, pathBeforeProject);
         this.setFields(fields);
     }
 
     public GenerateEntity(String nameEntity, String nameProject,
                           String pathBeforeProject) {
-        this.nameEntity = nameEntity;
-        this.nameProject = nameProject;
-        this.pathForCreateDirectory = pathBeforeProject + nameProject + "/src/main/java/com/example/" + nameProject;
-        this.pathForCreateJavaClass = pathBeforeProject + nameProject + "/src/main/java/";
+        super(nameEntity, nameProject, pathBeforeProject);
     }
 
-    public void setMethodSpec (MethodSpec methodSpec) {
-        this.methodSpecs.add(methodSpec);
-    }
 
-    public void setMethodSpecs (List<MethodSpec> methodSpecs) {
-        this.methodSpecs.addAll(methodSpecs);
-    }
 
-    public void setAnnotationSpecs(List<AnnotationSpec> annotationSpecs) {
-        this.annotationSpecs.addAll(annotationSpecs);
-    }
 
-    public void setFields(HashMap<TypeName, String> fields) {
+    public void setFields(Map<TypeName, String> fields) {
         this.fields.putAll(fields);
     }
 
@@ -79,11 +51,9 @@ public class GenerateEntity {
         this.fields.put(type, fields);
     }
 
-    public void setAnnotationSpec(AnnotationSpec annotationSpec) {
-        this.annotationSpecs.add(annotationSpec);
-    }
+    @Override
+    protected void toCreate() throws IOException {
 
-    private void createEntity() throws IOException {
         // создание пути для создание папки
         Path path = Paths.get(this.pathForCreateDirectory);
 
@@ -96,7 +66,6 @@ public class GenerateEntity {
         List<FieldSpec> fieldSpecs = new ArrayList<>();
 
         //генерация полей
-
         for (TypeName type : keys) {
             FieldSpec fieldSpec = FieldSpec.builder(type, this.fields.get(type), Modifier.PRIVATE)
                     .addAnnotation(AnnotationSpec.builder(Column.class)
@@ -107,8 +76,9 @@ public class GenerateEntity {
                     .build();
             fieldSpecs.add(fieldSpec);
         }
+
         //генерация класса entity
-        TypeSpec someEntity = generateClass(this.nameEntity, fieldSpecs, this.relationship);
+        TypeSpec someEntity = generateClass(this.nameClass, fieldSpecs, this.relationship);
 
         //создание java файла
         JavaFile javaFile = JavaFile.builder("com.example." + this.nameProject + ".entity", someEntity)
@@ -158,8 +128,5 @@ public class GenerateEntity {
                 .addAnnotation(Getter.class)
                 .addFields(fieldSpecs)
                 .build();
-    }
-    public void build() throws IOException {
-        createEntity();
     }
 }

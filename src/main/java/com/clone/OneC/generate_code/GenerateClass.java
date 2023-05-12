@@ -1,23 +1,25 @@
 package com.clone.OneC.generate_code;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.MethodSpec;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 public abstract class GenerateClass {
-    private String nameClass;
+    protected final String nameClass;
 
-    private String nameProject;
+    protected final String nameProject;
 
-    private  String pathForCreateDirectory;
+    protected final String pathForCreateDirectory;
 
-    private  String pathForCreateJavaClass;
+    public GenerateClass(String nameClass, String nameProject, String pathBeforeProject) {
+        this.nameClass = nameClass;
+        this.nameProject = nameProject;
+        this.pathForCreateDirectory = pathBeforeProject + nameProject + "/src/main/java/com/example/" + nameProject;;
+    }
 
-    private List<MethodSpec> methodSpecs = new ArrayList<>();
+    public void build() throws IOException {
+        toCreate();
+    }
 
-    private List<AnnotationSpec> annotationSpecs = new ArrayList<>();
+    protected void toCreate() throws IOException {
 
-
+    }
 }
