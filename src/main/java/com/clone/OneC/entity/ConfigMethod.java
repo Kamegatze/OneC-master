@@ -1,6 +1,6 @@
 package com.clone.OneC.entity;
 
-import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.*;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ConfigMethod extends BaseEntity{
     private String nameMethod;
-    private String pathForClassName;
-    private String codeOfMethod;
+    private String returnValue;
     private String pathRequest;
     private Set<String> keyParameterSpec;
     private List<String> pathPackage;

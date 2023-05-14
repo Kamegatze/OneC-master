@@ -20,13 +20,15 @@ public class GenerateController extends GenerateClass {
     private List<MethodSpec> methodSpecs = new ArrayList<>();
 
 
-    public GenerateController(String nameClass, String nameProject, String pathBeforeProject, List<MethodSpec> methodSpecs) {
-        super(nameClass, nameProject, pathBeforeProject);
+    public GenerateController(String nameClass, String nameProject, String pathBeforeProject,
+                              String packageName,
+                              List<MethodSpec> methodSpecs) {
+        super(nameClass, nameProject, pathBeforeProject, packageName);
         this.methodSpecs = methodSpecs;
     }
 
-    public GenerateController(String nameClass, String nameProject, String pathBeforeProject) {
-        super(nameClass, nameProject, pathBeforeProject);
+    public GenerateController(String nameClass, String nameProject, String pathBeforeProject, String packageName) {
+        super(nameClass, nameProject, pathBeforeProject, packageName);
     }
 
     public void setMethodSpecs(MethodSpec methodSpec) {
@@ -55,7 +57,7 @@ public class GenerateController extends GenerateClass {
                 addMethods(this.methodSpecs).
                 build();
 
-        JavaFile javaFile = JavaFile.builder("com.example." + this.nameProject + ".controllers", someController)
+        JavaFile javaFile = JavaFile.builder(this.packageName + "." + this.nameProject + ".controllers", someController)
                 .indent("    ")
                 .build();
 

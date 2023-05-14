@@ -1,6 +1,8 @@
 package com.clone.OneC.service;
 
 import com.clone.OneC.dto.ConfigDTO;
+import com.clone.OneC.repository.ConfigRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +14,8 @@ import java.util.zip.ZipInputStream;
 
 @Service
 public class ConfigurationService{
+    @Autowired
+    private ConfigRepository configRepository;
 
     @Value(value = "${project.path}")
     private String path;
@@ -21,10 +25,11 @@ public class ConfigurationService{
             "&language=%s" +
             "&bootVersion=%s" +
             "&baseDir=%s" +
-            "&groupID=%s" +
+            "&groupId=%s" +
             "&artifactId=%s" +
             "&name=%s" +
             "&description=%s" +
+            "&packageName=%s" +
             "&packaging=%s" +
             "&javaVersion=%s" +
             "&dependencies=%s";
@@ -41,13 +46,14 @@ public class ConfigurationService{
                 "java",
                 "3.0.4",
                 config.name(),
-                "com",
+                config.groupId(),
                 config.name(),
                 config.name(),
-                config.description(),
+                "Demo%20project%20for%20Spring%20Boot",
+                config.groupId() + "." + config.name(),
                 "jar",
-                "19",
-                "web,lombok");
+                config.javaVersion(),
+                "web,lombok,data-jpa,validation");
         System.out.println(projectUrl);
         return projectUrl;
     }
@@ -93,4 +99,6 @@ public class ConfigurationService{
         byte[] forObject = restTemplate.getForObject(uri, byte[].class);
         unzip(forObject,"./downloads");
     }
+
+
 }

@@ -24,6 +24,7 @@ public class Config extends BaseEntity{
     private String artifactId;
     private String name;
     private String description;
+    private String packageName;
     private String packaging;
     private String javaVersion;
     private List<String> dependencies;

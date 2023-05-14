@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-@Component
+
 @Entity
 @Table
 @Getter
@@ -18,4 +18,5 @@ import org.springframework.stereotype.Component;
 public class ConfigControllers extends BaseEntity {
     private String nameController;
     private String nameProject;
+    private String packageName;
 }
