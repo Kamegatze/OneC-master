@@ -7,6 +7,7 @@ import com.clone.OneC.generate_code.gnerate_method_controller.CreateMethod;
 import com.clone.OneC.generate_code.gnerate_method_controller.FactoryCreateMethod;
 import com.clone.OneC.generate_code.gnerate_method_controller.TypeMethod;
 import com.squareup.javapoet.*;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,15 +21,19 @@ public class CreateControllerService {
 
     private GenerateController generateController;
 
-
+    @Getter
     private Map<String, TypeName> typeValues = new LinkedHashMap<>(Map.of("String", TypeName.get(String.class),
             "PathVariable", TypeName.get(PathVariable.class), "RequestParam", TypeName.get(RequestParam.class),
             "RequestBody", TypeName.get(RequestBody.class), "Integer", TypeName.INT, "Long", TypeName.LONG,
             "void", TypeName.VOID));
 
 
-    public void setTypeValues(String name, TypeName type) {
+    public void setTypeValue(String name, TypeName type) {
         typeValues.put(name, type);
+    }
+
+    public void setTypeValues(Map<String, TypeName> typeValues) {
+        this.typeValues = typeValues;
     }
     public void setGenerateControllerAndSetGenerateMethod(ConfigControllers configControllers) {
         this.generateController = new GenerateController(configControllers.getNameController(),

@@ -5,6 +5,7 @@ import com.clone.OneC.entity.ConfigEntity;
 import com.clone.OneC.generate_code.GenerateEntity;
 import com.squareup.javapoet.*;
 import jakarta.persistence.*;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
@@ -15,6 +16,7 @@ import java.util.*;
 
 @Service
 public class CreateEntityService {
+
 
     private final Map<String, TypeName> types = Map.of("String", TypeName.get(String.class),
             "Integer", TypeName.INT, "Date", TypeName.get(Date.class), "Time", TypeName.get(Time.class),

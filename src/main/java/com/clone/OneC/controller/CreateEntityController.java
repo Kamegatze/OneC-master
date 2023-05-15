@@ -24,7 +24,7 @@ public class CreateEntityController {
     public void createEntity(@RequestBody ConfigEntityDTO configEntity) throws IOException {
         GenerateEntity entity = createEntityService.createAndAddEntities(configEntity);
         ClassName className = ClassName.get(entity.packageToJavaFile(), entity.getNameClass());
-        createControllerService.setTypeValues(entity.getNameClass(), className);
+        createControllerService.setTypeValue(entity.getNameClass(), className);
     }
 
     @GetMapping("/create_one_to_one")
